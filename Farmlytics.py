@@ -117,14 +117,6 @@ class Farmlytics:
             self.dock_widget.deleteLater()
             self.dock_widget = None
 
-
-    # def unload(self):
-    #     if self.selected_layer:
-    #         self.selected_layer.removeSelection()  # Clear any selection/highlighting
-    #     if self.action:
-    #         self.iface.removePluginMenu("&Farm Info", self.action)
-    #         self.iface.removeToolBarIcon(self.action)
-
     def select_layer(self):
         layers = [layer for layer in self.iface.mapCanvas().layers() if isinstance(layer, QgsVectorLayer)]
         if not layers:
@@ -173,7 +165,7 @@ class Farmlytics:
 
         self.table = QTableWidget()
 
-        # ------------------ DYNAMIC CYCLE ATTRIBUTES --------------------
+       
         attributes_to_show = ["Farm_ID", "crop", "Area", "harvest_date"]
         max_cycles = 0
         for field_name in feature.fields().names():
@@ -189,7 +181,7 @@ class Farmlytics:
                 f"Cycle {i} Peak NDVI", f"Cycle {i} Peak Date"
             ])
         attributes_to_show.extend(["Completed Cycles", "Incomplete Cycles"])
-        # ----------------------------------------------------------------
+
 
         self.table.setColumnCount(len(attributes_to_show))
         self.table.setHorizontalHeaderLabels(attributes_to_show)
@@ -237,7 +229,7 @@ class Farmlytics:
 
         export_table_btn = QPushButton("Export Table")
         export_table_btn.clicked.connect(self.export_table_to_csv)
-# --- Sorting Layout ---
+
         sort_layout = QHBoxLayout()
         self.sort_combo = QComboBox()
         fields = [self.table.horizontalHeaderItem(i).text() for i in range(self.table.columnCount())]
@@ -265,11 +257,10 @@ class Farmlytics:
         sort_layout.addWidget(self.sort_combo)
         sort_layout.addWidget(self.sort_button)
 
-        # --- Table + Sorting + Export Layout ---
+        
         table_with_export_layout = QVBoxLayout()
         table_with_export_layout.addWidget(self.table)
-        # Create Sort Controls Layout
- # --- Sort Controls ---
+
     
         sort_controls_layout = QHBoxLayout()
 
@@ -1150,11 +1141,8 @@ class Farmlytics:
             self.canvas = canvas
             return canvas
 
-        # if hasattr(self, 'plot_layout'):
-        #     QWidget().setLayout(self.plot_layout)  # Clear old layout
-        #     self.plot_layout = QVBoxLayout()
-        #     self.plot_layout.addWidget(canvas)
-        #     self.plot_area.setLayout(self.plot_layout)
+
+  
 
         except Exception as e:
             print("Error plotting NDVI graph:", e)
@@ -1163,10 +1151,10 @@ class Farmlytics:
     def on_checkbox_toggled(self, state, farm_id):
         is_checked = state == Qt.Checked
 
-        # Track whether this farm is interactive
+       
         self.active_farm_plots[farm_id] = is_checked
 
-        # Set visibility of the corresponding plot line
+       
         for line in self.ax.get_lines():
             if line.get_label() == farm_id:
                 line.set_visible(is_checked)
@@ -1175,9 +1163,7 @@ class Farmlytics:
  
 
     def populate_dynamic_cycles_table(self, properties):
-        """
-        Dynamically extracts and displays cycle-wise phenological data from feature properties.
-        """
+  
     
         fields = ['SOS', 'Peak date', 'Peak NDVI', 'EOS', 'Duration']
         column_labels = ['Cycle'] + fields
